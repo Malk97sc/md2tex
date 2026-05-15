@@ -1,0 +1,37 @@
+\documentclass[a4paper, 12pt, twoside]{@@DOCUMENTCLASSTOKEN@@}
+\usepackage{ifxetex}
+\ifxetex
+  \usepackage{fontspec}
+\else
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\fi
+\usepackage{babel}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{lscape}
+\usepackage{subcaption}
+\usepackage{imakeidx}
+\usepackage{tocbibind}
+\usepackage[hidelinks]{hyperref}
+
+@@CODEPACKAGES@@
+
+\usepackage{csquotes}
+\usepackage[normalem]{ulem}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{setspace}
+\setlength\parindent{1cm}
+\onehalfspacing
+
+\begin{document}
+
+@@TITLETOKEN@@
+\tableofcontents
+\clearpage
+
+@@BODYTOKEN@@
+
+\end{document}

@@ -1,12 +1,23 @@
-**/__pycache__/*
-env_m2t/*
-env/*
-img/lsp*
-output/*
-input/*
-.idea
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
 
-## aux TeX files
+.venv/
+
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+.idea/
+.vscode/
+
+output/
+input/
+
+# TeX auxiliary files
 _minted-*
 *.acn
 *.acr

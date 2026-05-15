@@ -1,0 +1,320 @@
+\documentclass[a4paper, 12pt, twoside]{article}
+\usepackage{ifxetex}
+\ifxetex
+  \usepackage{fontspec}
+\else
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\fi
+\usepackage{babel}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{lscape}
+\usepackage{subcaption}
+\usepackage{imakeidx}
+\usepackage{tocbibind}
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{xcolor}
+\usepackage{listings}
+\lstset{%
+	basicstyle=\footnotesize\ttfamily\linespread{1}\selectfont,%
+	numbers=left,%
+	backgroundcolor=\color{lightgray},%
+	showstringspaces=false,%
+	breaklines=true%
+}
+\usepackage[newfloat]{minted}
+\SetupFloatingEnvironment{listing}{}
+\usemintedstyle{emacs}
+\setminted{linenos, breaklines, tabsize=4, bgcolor=lightgray}
+
+\usepackage{csquotes}
+\usepackage[normalem]{ulem}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{setspace}
+\setlength\parindent{1cm}
+\onehalfspacing
+
+\begin{document}
+
+\begin{titlepage}
+    \vspace*{5cm}
+    \begin{center}
+        \Huge \textbf{CLI and TUI Parameters (Step by Step)}
+    \end{center}
+    \vfill
+\end{titlepage}
+
+\tableofcontents
+\clearpage
+
+\subsection*{About}
+\addcontentsline{toc}{subsection}{About}
+
+This guide explains the command:
+
+\begin{listing}[h!]
+    \begin{minted}{bash}
+md2tex source.md -c -t ./utils/template.tex -o ./export/export.tex -d book -u -f
+    \end{minted}
+\end{listing}
+
+and how to set the same options in the TUI.
+
+\subsection*{1. Base input}
+\addcontentsline{toc}{subsection}{1. Base input}
+
+\begin{listing}[h!]
+    \begin{minted}{bash}
+md2tex source.md
+    \end{minted}
+\end{listing}
+
+\begin{itemize}
+    \item \texttt{source.md} is the required input Markdown file.
+    \item It must exist and use \texttt{.md} extension.
+\end{itemize}
+
+TUI equivalent:
+
+\begin{itemize}
+    \item \texttt{Input Markdown File (*.md) [required]} = \texttt{source.md}
+\end{itemize}
+
+\subsection*{2. Build a complete TeX document}
+\addcontentsline{toc}{subsection}{2. Build a complete TeX document}
+
+\begin{listing}[h!]
+    \begin{minted}{bash}
+-c
+    \end{minted}
+\end{listing}
+
+\begin{itemize}
+    \item Enables complete TeX output (preamble + \texttt{\textbackslash\{\}\textbackslash\{\}begin\{document\}} + \texttt{\textbackslash\{\}\textbackslash\{\}end\{document\}} + TOC support).
+    \item Without \texttt{-c}, output is body-only TeX content.
+\end{itemize}
+
+TUI equivalent:
+
+\begin{itemize}
+    \item Enable \texttt{Complete TeX file (-c)}
+\end{itemize}
+
+\subsection*{3. Use a custom TeX template}
+\addcontentsline{toc}{subsection}{3. Use a custom TeX template}
+
+\begin{listing}[h!]
+    \begin{minted}{bash}
+-t ./utils/template.tex
+    \end{minted}
+\end{listing}
+
+\begin{itemize}
+    \item Uses a custom template instead of the bundled default template.
+    \item The template must include \texttt{@@BODYTOKEN@@}.
+    \item Common pattern: keep preamble/style in template and inject converted Markdown body at \texttt{@@BODYTOKEN@@}.
+\end{itemize}
+
+TUI equivalent:
+
+\begin{itemize}
+    \item \texttt{Template File (*.tex) [optional]} = \texttt{./utils/template.tex}
+\end{itemize}
+
+\subsubsection*{What is a template in md2tex?}
+\addcontentsline{toc}{subsubsection}{What is a template in md2tex?}
+
+A template is a complete \texttt{.tex} skeleton that \texttt{md2tex} uses as a wrapper around converted Markdown content.
+
+Think of it as:
+
+\begin{itemize}
+    \item Your LaTeX layout/style (preamble, fonts, margins, packages)
+    \item Plus one placeholder where converted Markdown will be inserted
+\end{itemize}
+
+Required token:
+
+\begin{itemize}
+    \item \texttt{@@BODYTOKEN@@} (mandatory): replaced with converted body content
+\end{itemize}
+
+Optional tokens supported by md2tex default flow:
+
+\begin{itemize}
+    \item \texttt{@@DOCUMENTCLASSTOKEN@@}: replaced with \texttt{article} or \texttt{book}
+    \item \texttt{@@TITLETOKEN@@}: replaced with the generated title page (if first Markdown heading is level 1)
+    \item \texttt{@@CODEPACKAGES@@}: replaced with code package setup (\texttt{listings}/\texttt{minted} + \texttt{xcolor}) according to backend strategy
+\end{itemize}
+
+Minimal valid custom template example:
+
+\begin{listing}[h!]
+    \begin{minted}{tex}
+\\documentclass{@@DOCUMENTCLASSTOKEN@@}
+@@CODEPACKAGES@@
+\\begin{document}
+@@TITLETOKEN@@
+@@BODYTOKEN@@
+\\end{document}
+    \end{minted}
+\end{listing}
+
+If \texttt{@@BODYTOKEN@@} is missing, conversion fails because md2tex has nowhere to inject the Markdown output.
+
+\subsection*{4. Choose custom output path}
+\addcontentsline{toc}{subsection}{4. Choose custom output path}
+
+\begin{listing}[h!]
+    \begin{minted}{bash}
+-o ./export/export.tex
+    \end{minted}
+\end{listing}
+
+\begin{itemize}
+    \item Writes output to \texttt{./export/export.tex}.
+    \item If directory does not exist, it is created.
+    \item If extension is missing, \texttt{.tex} is appended.
+\end{itemize}
+
+TUI equivalent:
+
+\begin{itemize}
+    \item \texttt{Output TeX File (*.tex) [optional]} = \texttt{./export/export.tex}
+\end{itemize}
+
+\subsection*{5. Select document class}
+\addcontentsline{toc}{subsection}{5. Select document class}
+
+\begin{listing}[h!]
+    \begin{minted}{bash}
+-d book
+    \end{minted}
+\end{listing}
+
+\begin{itemize}
+    \item Sets TeX document class to \texttt{book}.
+    \item Allowed values: \texttt{article} or \texttt{book}.
+    \item Affects heading mapping (\texttt{\#} as \texttt{\textbackslash\{\}\textbackslash\{\}chapter\{\}} in \texttt{book}, \texttt{\textbackslash\{\}\textbackslash\{\}section\{\}} in \texttt{article}).
+\end{itemize}
+
+TUI equivalent:
+
+\begin{itemize}
+    \item \texttt{document\_class} selector = \texttt{book}
+\end{itemize}
+
+\subsection*{6. Convert headings as unnumbered}
+\addcontentsline{toc}{subsection}{6. Convert headings as unnumbered}
+
+\begin{listing}[h!]
+    \begin{minted}{bash}
+-u
+    \end{minted}
+\end{listing}
+
+\begin{itemize}
+    \item Uses unnumbered section commands (e.g., \texttt{\textbackslash\{\}\textbackslash\{\}chapter\textit{\{\}}, \texttt{\textbackslash\{\}\textbackslash\{\}section}\{\}}).
+    \item The converter still adds TOC entries with \texttt{\textbackslash\{\}\textbackslash\{\}addcontentsline}.
+\end{itemize}
+
+TUI equivalent:
+
+\begin{itemize}
+    \item Enable \texttt{Unnumbered headers (-u)}
+\end{itemize}
+
+\subsection*{7. Convert inline quotes to French quotes}
+\addcontentsline{toc}{subsection}{7. Convert inline quotes to French quotes}
+
+\begin{listing}[h!]
+    \begin{minted}{bash}
+-f
+    \end{minted}
+\end{listing}
+
+\begin{itemize}
+    \item Converts inline quoted text to \texttt{\textbackslash\{\}\textbackslash\{\}enquote\{...\}} (via \texttt{csquotes}).
+\end{itemize}
+
+TUI equivalent:
+
+\begin{itemize}
+    \item Enable \texttt{French quotes (-f)}
+\end{itemize}
+
+\subsection*{Full mapping summary}
+\addcontentsline{toc}{subsection}{Full mapping summary}
+
+\begin{itemize}
+    \item CLI \texttt{source.md} -> TUI \texttt{Input Markdown File}
+    \item CLI \texttt{-c} -> TUI \texttt{Complete TeX file (-c)}
+    \item CLI \texttt{-t PATH} -> TUI \texttt{Template File}
+    \item CLI \texttt{-o PATH} -> TUI \texttt{Output TeX File}
+    \item CLI \texttt{-d book|article} -> TUI \texttt{document\_class}
+    \item CLI \texttt{-u} -> TUI \texttt{Unnumbered headers (-u)}
+    \item CLI \texttt{-f} -> TUI \texttt{French quotes (-f)}
+\end{itemize}
+
+\subsection*{Extra options you can also use}
+\addcontentsline{toc}{subsection}{Extra options you can also use}
+
+CLI:
+
+\begin{listing}[h!]
+    \begin{minted}{bash}
+--code-backend auto|minted|listings
+--shell-escape
+    \end{minted}
+\end{listing}
+
+TUI equivalents:
+
+\begin{itemize}
+    \item \texttt{Enable shell-escape} toggle
+    \item Code backend is \texttt{auto} by default:
+    \begin{itemize}
+        \item shell-escape enabled -> \texttt{minted}
+        \item shell-escape disabled -> \texttt{listings}
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Practical examples}
+\addcontentsline{toc}{subsection}{Practical examples}
+
+\begin{enumerate}
+    \item Minimal conversion:
+\end{enumerate}
+
+\begin{listing}[h!]
+    \begin{minted}{bash}
+md2tex myfiles/example.md
+    \end{minted}
+\end{listing}
+
+\begin{enumerate}
+    \item Complete book with custom template and output:
+\end{enumerate}
+
+\begin{listing}[h!]
+    \begin{minted}{bash}
+md2tex myfiles/example.md -c -t ./templates/book.tex -o ./build/notes.tex -d book -u -f
+    \end{minted}
+\end{listing}
+
+\begin{enumerate}
+    \item Force minted with shell-escape expectations:
+\end{enumerate}
+
+\begin{listing}[h!]
+    \begin{minted}{bash}
+md2tex myfiles/example.md -c --code-backend minted --shell-escape
+    \end{minted}
+\end{listing}
+
+
+\end{document}

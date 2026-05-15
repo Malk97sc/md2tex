@@ -1,0 +1,77 @@
+\documentclass[a4paper, 12pt, twoside]{article}
+\usepackage{ifxetex}
+\ifxetex
+  \usepackage{fontspec}
+\else
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\fi
+\usepackage{babel}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{lscape}
+\usepackage{subcaption}
+\usepackage{imakeidx}
+\usepackage{tocbibind}
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{xcolor}
+\usepackage{listings}
+\lstset{%
+	basicstyle=\footnotesize\ttfamily\linespread{1}\selectfont,%
+	numbers=left,%
+	backgroundcolor=\color{lightgray},%
+	showstringspaces=false,%
+	breaklines=true%
+}
+\usepackage[newfloat]{minted}
+\SetupFloatingEnvironment{listing}{}
+\usemintedstyle{emacs}
+\setminted{linenos, breaklines, tabsize=4, bgcolor=lightgray}
+
+\usepackage{csquotes}
+\usepackage[normalem]{ulem}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{setspace}
+\setlength\parindent{1cm}
+\onehalfspacing
+
+\begin{document}
+
+\begin{titlepage}
+    \vspace*{5cm}
+    \begin{center}
+        \Huge \textbf{Architecture}
+    \end{center}
+    \vfill
+\end{titlepage}
+
+\tableofcontents
+\clearpage
+
+\subsection*{md2tex}
+\addcontentsline{toc}{subsection}{md2tex}
+
+\texttt{md2tex} is built around a layered architecture cleanly separating text parsing, abstract representations, escaping mechanisms, and output rendering.
+
+\subsection*{Core Modules}
+\addcontentsline{toc}{subsection}{Core Modules}
+
+\begin{itemize}
+    \item \textbf{\texttt{cli.py} \& \texttt{tui/}}: User interface layers routing interactions via Click (CLI commands) or Textual (Terminal User Interface). Both interface layers utilize the \texttt{md2tex/services.py} core to execute Markdown conversions reliably.
+    \item \textbf{\texttt{services.py}}: The orchestration layer. It receives requests, standardizes path interactions, constructs \texttt{RenderOptions}, calls the parser and renderer, and injects templates.
+    \item \textbf{\texttt{parser.py}}: A block-level, line-by-line Markdown parser. It scans strings and safely extracts raw block entities (like \texttt{CodeBlock}, \texttt{BlockQuote}, \texttt{Table}, \texttt{Heading}) into AST \texttt{IR Nodes}. 
+    \item \textbf{\texttt{nodes.py}}: Simple structure layer outlining the abstract tree (\texttt{Table}, \texttt{Heading}, \texttt{CodeBlock}, \texttt{FootnoteDef}, \texttt{ListBlock}, etc.).
+    \item \textbf{\texttt{escaping.py}}: Security translation module correctly escaping character artifacts (\texttt{\$}, \texttt{\%}, \texttt{\{}) \textit{after} blocks are parsed, but \textit{before} formatting runs.
+    \item \textbf{\texttt{renderer.py}}: Main TeX compilation module processing \texttt{IR Nodes}. It handles each node type (e.g., \texttt{\_render\_table}) and recursively processes Inline Formatting via Regex (Italics, Hyperlinks, Strikethrough, etc.).
+\end{itemize}
+
+\subsection*{Flow of Data}
+\addcontentsline{toc}{subsection}{Flow of Data}
+
+\texttt{Markdown String -> Block Parser -> IR Ast (nodes.py) -> Renderer (escape -> format -> inject) -> TeX String}
+
+
+\end{document}

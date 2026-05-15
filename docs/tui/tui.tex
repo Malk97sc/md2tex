@@ -1,0 +1,148 @@
+\documentclass[a4paper, 12pt, twoside]{article}
+\usepackage{ifxetex}
+\ifxetex
+  \usepackage{fontspec}
+\else
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\fi
+\usepackage{babel}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{lscape}
+\usepackage{subcaption}
+\usepackage{imakeidx}
+\usepackage{tocbibind}
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{xcolor}
+\usepackage{listings}
+\lstset{%
+	basicstyle=\footnotesize\ttfamily\linespread{1}\selectfont,%
+	numbers=left,%
+	backgroundcolor=\color{lightgray},%
+	showstringspaces=false,%
+	breaklines=true%
+}
+\usepackage[newfloat]{minted}
+\SetupFloatingEnvironment{listing}{}
+\usemintedstyle{emacs}
+\setminted{linenos, breaklines, tabsize=4, bgcolor=lightgray}
+
+\usepackage{csquotes}
+\usepackage[normalem]{ulem}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{setspace}
+\setlength\parindent{1cm}
+\onehalfspacing
+
+\begin{document}
+
+\begin{titlepage}
+    \vspace*{5cm}
+    \begin{center}
+        \Huge \textbf{Using the TUI}
+    \end{center}
+    \vfill
+\end{titlepage}
+
+\tableofcontents
+\clearpage
+
+\subsection*{md2tex}
+\addcontentsline{toc}{subsection}{md2tex}
+
+\texttt{md2tex} includes a Textual-based TUI so you can convert Markdown to TeX without memorizing CLI flags.
+
+\subsection*{1. Install TUI dependency}
+\addcontentsline{toc}{subsection}{1. Install TUI dependency}
+
+\begin{listing}[h!]
+    \begin{minted}{bash}
+pip install ".[tui]"
+# or
+uv sync --extra tui
+    \end{minted}
+\end{listing}
+
+\subsection*{2. Launch the TUI}
+\addcontentsline{toc}{subsection}{2. Launch the TUI}
+
+\begin{listing}[h!]
+    \begin{minted}{bash}
+md2tex tui
+# or
+md2tex interactive
+    \end{minted}
+\end{listing}
+
+\subsection*{3. Fill the form}
+\addcontentsline{toc}{subsection}{3. Fill the form}
+
+\begin{itemize}
+    \item \texttt{Input Markdown File (*.md) [required]}: path to your source \texttt{.md} file.
+    \item \texttt{Output TeX File (*.tex) [optional]}: custom output path. If empty, default output path is used.
+    \item \texttt{Template File (*.tex) [optional]}: custom template for complete TeX generation.
+    \item \texttt{document\_class}: choose \texttt{article} or \texttt{book}.
+    \item \texttt{Complete TeX file (-c)}: wraps output with preamble/template.
+    \item \texttt{Unnumbered headers (-u)}: uses unnumbered section commands.
+    \item \texttt{French quotes (-f)}: converts inline quotes using \texttt{\textbackslash\{\}\textbackslash\{\}enquote\{\}}.
+    \item \texttt{Compile PDF}: runs \texttt{pdflatex} twice after conversion.
+    \item \texttt{Enable shell-escape}: enables \texttt{-shell-escape} in compilation and allows \texttt{minted} backend in auto mode.
+\end{itemize}
+
+Press \texttt{Convert} to run the selected workflow.
+
+\subsection*{4. Understand the result logs}
+\addcontentsline{toc}{subsection}{4. Understand the result logs}
+
+The log panel reports each step explicitly:
+
+\begin{itemize}
+    \item Successful TeX generation: shows exact \texttt{.tex} path.
+    \item Successful PDF compilation: shows exact \texttt{.pdf} path.
+    \item Temporary LaTeX artifacts are removed automatically (\texttt{.aux}, \texttt{.log}, \texttt{.out}, \texttt{.toc}, \texttt{.synctex.gz}, \texttt{\_minted-*}).
+    \item Compilation failure: shows a compact error summary with next action.
+\end{itemize}
+
+\subsection*{5. Code block backend behavior}
+\addcontentsline{toc}{subsection}{5. Code block backend behavior}
+
+\texttt{md2tex} now uses backend strategy \texttt{auto} by default:
+
+\begin{itemize}
+    \item With shell-escape enabled: uses \texttt{minted} for fenced code blocks with language.
+    \item Without shell-escape: falls back to \texttt{listings} to avoid minted compile failures.
+\end{itemize}
+
+This prevents the common error:
+
+\texttt{Package minted Error: You must invoke LaTeX with the -shell-escape flag.}
+
+\subsection*{6. Step-by-step example}
+\addcontentsline{toc}{subsection}{6. Step-by-step example}
+
+\begin{enumerate}
+    \item Run \texttt{md2tex tui}.
+    \item Set \texttt{Input Markdown File} to \texttt{docs/tui.md}.
+    \item Enable \texttt{Complete TeX file (-c)}.
+    \item Enable \texttt{Compile PDF}.
+    \item If you need minted syntax highlighting, enable \texttt{Enable shell-escape}.
+    \item Click \texttt{Convert}.
+    \item Check log lines for generated \texttt{.tex} and \texttt{.pdf} paths.
+\end{enumerate}
+
+\subsection*{7. Troubleshooting}
+\addcontentsline{toc}{subsection}{7. Troubleshooting}
+
+\begin{itemize}
+    \item \texttt{pdflatex is not installed or not in PATH}:   install TeX Live/MacTeX and retry.
+    \item \texttt{minted requires -shell-escape}:   enable \texttt{Enable shell-escape}, or run without it so backend auto uses \texttt{listings}.
+    \item Input path error:   ensure the input file exists and has \texttt{.md} extension.
+    \item Template token error:   custom template must contain \texttt{@@BODYTOKEN@@}.
+\end{itemize}
+
+
+\end{document}

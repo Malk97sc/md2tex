@@ -54,8 +54,6 @@
 
 Originally built as a simple parser, \texttt{md2tex} has been \textbf{completely modernized} into a robust parsing pipeline powered by an Intermediate Representation (IR) AST structure that guarantees 100\% stable parsing without colliding formatting conflicts.
 
-\par\noindent\rule{\linewidth}{0.4pt}
-
 \subsection*{Features}
 \addcontentsline{toc}{subsection}{Features}
 
@@ -66,8 +64,6 @@ Originally built as a simple parser, \texttt{md2tex} has been \textbf{completely
     \item \textbf{GFM Support}: Full implicit translation of \texttt{Tables}, \texttt{Strikethroughs}, Code Blocks, Headers, References from standard Markdowns directly into \texttt{tabular}, \texttt{sout}, \texttt{minted}, \texttt{section}, etc.
     \item \textbf{Quotes}: Native parameter translation into French inline formatting \texttt{\textbackslash\{\}enquote\{\}} via \texttt{csquotes}.
 \end{itemize}
-
-\par\noindent\rule{\linewidth}{0.4pt}
 
 \subsection*{Installation}
 \addcontentsline{toc}{subsection}{Installation}
@@ -120,8 +116,6 @@ sudo dnf install texlive-scheme-medium
 brew install --cask mactex-no-gui
 \end{lstlisting}
 
-\par\noindent\rule{\linewidth}{0.4pt}
-
 \subsection*{Usage}
 \addcontentsline{toc}{subsection}{Usage}
 
@@ -162,20 +156,16 @@ md2tex path/to/document.md -c
 md2tex source.md -c -t ./utils/template.tex -o ./export/export.tex -d book -u -f
 \end{lstlisting}
 
-\par\noindent\rule{\linewidth}{0.4pt}
-
 \subsection*{Documentation}
 \addcontentsline{toc}{subsection}{Documentation}
 
 For a complete understanding of how this tool abstracts parsing structures, as well as TUI capabilities, please review the documentation directory:
 
 \begin{itemize}
-    \item \href{docs/architecture.md}{System Architecture Overview}
-    \item \href{docs/tui.md}{Terminal User Interface (TUI)}
-    \item \href{docs/cli\_tui\_parameters.md}{CLI and TUI Parameters (Step by Step)}
+    \item \href{docs/architecture/architecture.md}{System Architecture Overview}
+    \item \href{docs/tui/tui.md}{Terminal User Interface (TUI)}
+    \item \href{docs/cli\_tui\_parameters/cli\_tui\_parameters.md}{CLI and TUI Parameters (Step by Step)}
 \end{itemize}
-
-\par\noindent\rule{\linewidth}{0.4pt}
 
 \subsection*{License and Authors}
 \addcontentsline{toc}{subsection}{License and Authors}

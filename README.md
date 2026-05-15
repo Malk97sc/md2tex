@@ -5,16 +5,12 @@
 
 Originally built as a simple parser, `md2tex` has been **completely modernized** into a robust parsing pipeline powered by an Intermediate Representation (IR) AST structure that guarantees 100% stable parsing without colliding formatting conflicts.
 
----
-
 ## Features
 - **Strict AST Architecture**: Guaranteed reliable markdown block parsing before inline TeX escaping prevents artifacts.
 - **TUI Dashboard**: Native Textual Terminal User Interface for configuration-free execution.
 - **Full Template Control**: Automatically wrap logic in predefined headers, or inject converted contents seamlessly into custom TeX template `@@BODYTOKEN@@` blocks.
 - **GFM Support**: Full implicit translation of `Tables`, `Strikethroughs`, Code Blocks, Headers, References from standard Markdowns directly into `tabular`, `sout`, `minted`, `section`, etc.
 - **Quotes**: Native parameter translation into French inline formatting `\enquote{}` via `csquotes`.
-
----
 
 ## Installation
 
@@ -57,8 +53,6 @@ sudo dnf install texlive-scheme-medium
 brew install --cask mactex-no-gui
 ```
 
----
-
 ## Usage
 
 ### Place your documents
@@ -91,15 +85,11 @@ md2tex path/to/document.md -c
 md2tex source.md -c -t ./utils/template.tex -o ./export/export.tex -d book -u -f
 ```
 
----
-
 ## Documentation
 For a complete understanding of how this tool abstracts parsing structures, as well as TUI capabilities, please review the documentation directory:
-- [System Architecture Overview](docs/architecture.md)
-- [Terminal User Interface (TUI)](docs/tui.md)
-- [CLI and TUI Parameters (Step by Step)](docs/cli_tui_parameters.md)
-
----
+- [System Architecture Overview](docs/architecture/architecture.md)
+- [Terminal User Interface (TUI)](docs/tui/tui.md)
+- [CLI and TUI Parameters (Step by Step)](docs/cli_tui_parameters/cli_tui_parameters.md)
 
 ## License and Authors
 Developed by **Paul Kervegan** in August 2022.
